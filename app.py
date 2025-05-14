@@ -1,21 +1,19 @@
-from flask import (
-    Flask,
-    render_template,
-    request,
-    redirect,
-    url_for,
-    flash,
-    session,
-    jsonify,
-)
-
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 import mysql.connector
 from dotenv import load_dotenv
+from functools import wraps
+import random
+from faker import Faker
 from datetime import datetime
+import matplotlib
+
+import matplotlib.pyplot as plt
+from io import BytesIO
+import base64
 import json
+
 
 load_dotenv()
 

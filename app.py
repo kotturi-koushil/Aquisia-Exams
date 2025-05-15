@@ -332,18 +332,6 @@ def quiz(day):
         )
 
         questions = curr.fetchall()
-
-        curr.execute(
-            """ SELECT attempts FROM quiz_results WHERE user_email = %s and day = %s
-            """,
-            (
-                user_email,
-                day,
-            ),
-        )
-        attempt = curr.fetchall()[0]["attempts"]
-        if attempt > 2:
-            return "{Sorry You have Exceeded The Limit......}"
         if not questions:
             flash(f"No questions found for Day {day}", "warning")
             return redirect(url_for("exams"))

@@ -549,6 +549,19 @@
             .next-btn {
                 width: 100%;
             }
+
+            /* Fix for subject-wise performance table */
+            .subject-scores {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            .subject-scores th,
+            .subject-scores td {
+                padding: 8px 10px;
+                font-size: 0.85rem;
+            }
         }
     </style>
 </head>
@@ -594,15 +607,17 @@
 
     <div class="quiz-container">
         <div class="quiz-header">
-            {% if day == 0 %}
-            <div class="quiz-title">Sample Test</div>
-            {% else %}
-            <div class="quiz-title">Day {{ day }} Quiz</div>
-            {% endif %}
+            <div class="quiz-title" id="quiz-title">
+                {% if day == 0 %}
+                Sample Test
+                {% else %}
+                Day {{ day }} Quiz
+                {% endif %}
+            </div>
             <div class="quiz-progress">
                 <div class="progress-text">Question <span id="current-question">1</span>/<span id="total-questions">{{
                         questions|length }}</span></div>
-                <div class="timer-container">
+                <div class="timer-container" id="timer-container">
                     <div class="timer" id="timer">1:00</div>
                     <div class="timer-progress">
                         <div class="timer-progress-bar" id="timer-progress-bar"></div>
@@ -743,11 +758,21 @@
         const subjectScoresBody = document.getElementById('subject-scores-body');
         const downloadPdfBtn = document.getElementById('download-pdf');
         const performanceAnalysisBtn = document.getElementById('performance-analysis');
+        const quizTitleElement = document.getElementById('quiz-title');
+        const timerContainer = document.getElementById('timer-container');
 
         // Initialize the quiz
         function initQuiz() {
             initializeSubjectScores();
             totalQuestionsSpan.textContent = questions.length;
+
+            // Set quiz title based on day
+            if (day == 0) {
+                quizTitleElement.textContent = "Sample Test";
+            } else {
+                quizTitleElement.textContent = `Day ${day} Quiz`;
+            }
+
             loadQuestion();
 
             // Set up event listeners for new buttons
@@ -918,6 +943,9 @@
         function showResults() {
             questionContainer.style.display = 'none';
             resultContainer.style.display = 'block';
+
+            // Hide timer in results view
+            timerContainer.style.display = 'none';
 
             // Display overall score
             resultScore.textContent = `${score}/${questions.length}`;
